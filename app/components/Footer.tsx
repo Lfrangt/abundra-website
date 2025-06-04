@@ -1,133 +1,283 @@
 "use client";
 
-import Link from "next/link";
-import { Bitcoin, Brain, Blocks, Mail, MapPin, Phone } from "lucide-react";
+import { motion } from 'framer-motion'
+import { Mail, Phone, MapPin, Twitter, Github, Linkedin, ArrowUp } from 'lucide-react'
 
-export default function Footer() {
-  const currentYear = new Date().getFullYear();
+const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
-  const footerSections = [
-    {
-      title: "Company",
-      links: [
-        { name: "About Us", href: "/about" },
-        { name: "Our Mission", href: "/mission" },
-        { name: "Team", href: "/team" },
-        { name: "Careers", href: "/careers" },
-      ],
-    },
-    {
-      title: "Services",
-      links: [
-        { name: "AI Services", href: "/ai-services" },
-        { name: "Blockchain R&D", href: "/blockchain" },
-        { name: "Investment", href: "/investment" },
-        { name: "Consulting", href: "/consulting" },
-      ],
-    },
-    {
-      title: "Resources",
-      links: [
-        { name: "BTC Strategy", href: "/btc-strategy" },
-        { name: "Research", href: "/research" },
-        { name: "Blog", href: "/blog" },
-        { name: "Documentation", href: "/docs" },
-      ],
-    },
-  ];
+  const footerLinks = {
+    company: [
+      { label: 'About Us', href: '#about' },
+      { label: 'Our Team', href: '#team' },
+      { label: 'Careers', href: '#careers' },
+      { label: 'News', href: '#news' }
+    ],
+    services: [
+      { label: 'AI Lab', href: '#ai-lab' },
+      { label: 'Blockchain R&D', href: '#blockchain' },
+      { label: 'Digital Capital', href: '#investment' },
+      { label: 'Consulting', href: '#consulting' }
+    ],
+    resources: [
+      { label: 'Documentation', href: '#docs' },
+      { label: 'API Reference', href: '#api' },
+      { label: 'White Papers', href: '#papers' },
+      { label: 'Blog', href: '#blog' }
+    ],
+    legal: [
+      { label: 'Privacy Policy', href: '#privacy' },
+      { label: 'Terms of Service', href: '#terms' },
+      { label: 'Cookie Policy', href: '#cookies' },
+      { label: 'Disclaimer', href: '#disclaimer' }
+    ]
+  }
+
+  const socialLinks = [
+    { icon: Twitter, href: 'https://twitter.com/abundracapital', label: 'Twitter' },
+    { icon: Github, href: 'https://github.com/abundracapital', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://linkedin.com/company/abundracapital', label: 'LinkedIn' }
+  ]
+
+  const contactInfo = [
+    { icon: Mail, value: 'hello@abundra.com', href: 'mailto:hello@abundra.com' },
+    { icon: Phone, value: '+1 (647) 555-0123', href: 'tel:+16475550123' },
+    { icon: MapPin, value: 'Toronto, ON, Canada', href: '#' }
+  ]
 
   return (
-    <footer className="bg-abundra-dark text-white">
-      <div className="max-w-7xl mx-auto section-padding py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Company Info */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="text-3xl font-bold text-abundra-blue">
-                Abundra
-              </div>
-              <div className="text-sm text-gray-400">Capital Inc.</div>
-            </div>
+    <footer id="contact" className="bg-gray-900 text-white relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-10 left-10 w-32 h-32 border border-white rounded-full" />
+        <div className="absolute bottom-10 right-10 w-48 h-48 border border-white rounded-full" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 border border-white rounded-full" />
+      </div>
 
-            <p className="text-gray-300 mb-6 leading-relaxed">
-              Building a technology platform that integrates AI, blockchain, and
-              digital capital for a more abundant, intelligent, and peaceful
-              future.
-            </p>
+      <div className="relative z-10">
+        {/* Main Footer Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+          {/* Top Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="grid lg:grid-cols-5 gap-12 mb-16"
+          >
+            {/* Company Info */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                  <span className="text-white font-bold">A</span>
+                </div>
+                <span className="text-2xl font-bold">Abundra Capital</span>
+              </div>
+              
+              <p className="text-gray-300 leading-relaxed max-w-md">
+                Building the future with AI, blockchain, and digital capital. 
+                We create intelligent solutions for tomorrow's financial infrastructure.
+              </p>
 
-            <div className="flex items-center gap-6 mb-6">
-              <div className="flex items-center gap-2">
-                <Brain className="w-5 h-5 text-abundra-blue" />
-                <span className="text-sm">AI</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Blocks className="w-5 h-5 text-purple-400" />
-                <span className="text-sm">Blockchain</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Bitcoin className="w-5 h-5 text-orange-400" />
-                <span className="text-sm">Digital Capital</span>
-              </div>
-            </div>
-
-            <div className="space-y-2 text-sm text-gray-400">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                <span>Canada 🇨🇦</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                <span>contact@abundra.capital</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer Links */}
-          {footerSections.map((section) => (
-            <div key={section.title}>
-              <h3 className="font-semibold mb-4">{section.title}</h3>
-              <ul className="space-y-2">
-                {section.links.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-gray-400 hover:text-white transition-colors duration-200"
+              <div className="space-y-3">
+                {contactInfo.map((contact, index) => {
+                  const Icon = contact.icon
+                  return (
+                    <motion.a
+                      key={contact.value}
+                      href={contact.href}
+                      className="flex items-center space-x-3 text-gray-300 hover:text-white transition-colors duration-200"
+                      whileHover={{ x: 5 }}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
                     >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+                      <Icon size={18} />
+                      <span>{contact.value}</span>
+                    </motion.a>
+                  )
+                })}
+              </div>
             </div>
-          ))}
-        </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between">
-          <div className="text-gray-400 text-sm mb-4 md:mb-0">
-            © {currentYear} Abundra Capital Inc. All rights reserved.
-          </div>
+            {/* Links Sections */}
+            <div className="lg:col-span-3 grid md:grid-cols-4 gap-8">
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Company</h3>
+                <ul className="space-y-3">
+                  {footerLinks.company.map((link, index) => (
+                    <motion.li
+                      key={link.label}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
+                      <a
+                        href={link.href}
+                        className="text-gray-400 hover:text-white transition-colors duration-200"
+                      >
+                        {link.label}
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
 
-          <div className="flex items-center gap-6 text-sm text-gray-400">
-            <Link
-              href="/privacy"
-              className="hover:text-white transition-colors duration-200"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="/terms"
-              className="hover:text-white transition-colors duration-200"
-            >
-              Terms of Service
-            </Link>
-            <div className="italic">
-              "Wealth is not just about capital, but calmness, clarity, and
-              code."
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Services</h3>
+                <ul className="space-y-3">
+                  {footerLinks.services.map((link, index) => (
+                    <motion.li
+                      key={link.label}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
+                      <a
+                        href={link.href}
+                        className="text-gray-400 hover:text-white transition-colors duration-200"
+                      >
+                        {link.label}
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Resources</h3>
+                <ul className="space-y-3">
+                  {footerLinks.resources.map((link, index) => (
+                    <motion.li
+                      key={link.label}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
+                      <a
+                        href={link.href}
+                        className="text-gray-400 hover:text-white transition-colors duration-200"
+                      >
+                        {link.label}
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Legal</h3>
+                <ul className="space-y-3">
+                  {footerLinks.legal.map((link, index) => (
+                    <motion.li
+                      key={link.label}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
+                      <a
+                        href={link.href}
+                        className="text-gray-400 hover:text-white transition-colors duration-200"
+                      >
+                        {link.label}
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
+          </motion.div>
+
+          {/* Newsletter Signup */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="p-8 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-3xl border border-gray-700 mb-12"
+          >
+            <div className="max-w-2xl mx-auto text-center">
+              <h3 className="text-2xl font-bold mb-4">Stay Updated</h3>
+              <p className="text-gray-300 mb-6">
+                Get the latest insights on AI, blockchain, and digital capital innovations.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 px-4 py-3 rounded-full bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors duration-200"
+                />
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+                >
+                  Subscribe
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Bottom Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-gray-700"
+          >
+            <div className="flex items-center space-x-4 mb-4 md:mb-0">
+              <p className="text-gray-400">
+                © 2024 Abundra Capital Inc. All rights reserved.
+              </p>
+            </div>
+
+            <div className="flex items-center space-x-6">
+              {/* Social Links */}
+              <div className="flex items-center space-x-4">
+                {socialLinks.map((social, index) => {
+                  const Icon = social.icon
+                  return (
+                    <motion.a
+                      key={social.label}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 transition-colors duration-200"
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                    >
+                      <Icon size={18} />
+                    </motion.a>
+                  )
+                })}
+              </div>
+
+              {/* Back to Top */}
+              <motion.button
+                onClick={scrollToTop}
+                className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <ArrowUp size={18} />
+              </motion.button>
+            </div>
+          </motion.div>
         </div>
       </div>
     </footer>
-  );
+  )
 }
+
+export default Footer
