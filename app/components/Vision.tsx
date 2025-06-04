@@ -2,31 +2,34 @@
 
 import { motion } from "framer-motion";
 import { Eye, Target, Heart, Zap } from "lucide-react";
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Vision = () => {
+  const { t } = useLanguage();
+  
   const visionPoints = [
     {
       icon: Eye,
-      title: "Vision",
-      description: "Building a platform that integrates AI, blockchain, and digital capital for a more abundant, intelligent, and peaceful future.",
+      title: t('vision.vision.title'),
+      description: t('vision.vision.desc'),
       color: "from-blue-500 to-blue-600"
     },
     {
       icon: Target,
-      title: "Mission",
-      description: "Empowering blockchain innovation with AI, laying out the future with digital capital, and building long-term value with technology.",
+      title: t('vision.mission.title'),
+      description: t('vision.mission.desc'),
       color: "from-purple-500 to-purple-600"
     },
     {
       icon: Heart,
-      title: "Values",
-      description: "Calmness, clarity, and code. We believe wealth extends beyond capital to encompass wisdom and well-being.",
+      title: t('vision.values.title'),
+      description: t('vision.values.desc'),
       color: "from-pink-500 to-pink-600"
     },
     {
       icon: Zap,
-      title: "Innovation",
-      description: "Pioneering the convergence of AI and Web3 technologies to create unprecedented value and opportunities.",
+      title: t('vision.innovation.title'),
+      description: t('vision.innovation.desc'),
       color: "from-orange-500 to-orange-600"
     }
   ];
@@ -43,14 +46,13 @@ const Vision = () => {
           className="text-center mb-20"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-            <span className="text-gray-900">Our</span>{' '}
+            <span className="text-gray-900">{t('vision.header')}</span>{' '}
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Foundation
+              {t('vision.foundation')}
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Guided by principles of innovation, integrity, and impact, we're building 
-            tomorrow's financial infrastructure today.
+            {t('vision.subtitle')}
           </p>
         </motion.div>
 
@@ -101,7 +103,7 @@ const Vision = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10" />
             <div className="relative z-10">
               <blockquote className="text-2xl lg:text-3xl font-medium leading-relaxed mb-6 italic">
-                "Wealth is not just about capital, but calmness, clarity, and code."
+                {t('vision.quote')}
               </blockquote>
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-2 h-2 bg-blue-400 rounded-full" />

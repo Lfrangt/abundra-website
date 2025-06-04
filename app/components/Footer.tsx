@@ -2,36 +2,40 @@
 
 import { motion } from 'framer-motion'
 import { Mail, Phone, MapPin, Twitter, Github, Linkedin, ArrowUp } from 'lucide-react'
+import { useLanguage } from '../contexts/LanguageContext'
+import Logo from './Logo'
 
 const Footer = () => {
+  const { t } = useLanguage();
+  
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const footerLinks = {
     company: [
-      { label: 'About Us', href: '#about' },
-      { label: 'Our Team', href: '#team' },
-      { label: 'Careers', href: '#careers' },
-      { label: 'News', href: '#news' }
+      { label: t('footer.aboutUs'), href: '#about' },
+      { label: t('footer.ourTeam'), href: '#team' },
+      { label: t('footer.careers'), href: '#careers' },
+      { label: t('footer.news'), href: '#news' }
     ],
     services: [
-      { label: 'AI Lab', href: '#ai-lab' },
-      { label: 'Blockchain R&D', href: '#blockchain' },
-      { label: 'Digital Capital', href: '#investment' },
-      { label: 'Consulting', href: '#consulting' }
+      { label: t('footer.aiLab'), href: '#ai-lab' },
+      { label: t('footer.blockchainRD'), href: '#blockchain' },
+      { label: t('footer.digitalCapital'), href: '#investment' },
+      { label: t('footer.consulting'), href: '#consulting' }
     ],
     resources: [
-      { label: 'Documentation', href: '#docs' },
-      { label: 'API Reference', href: '#api' },
-      { label: 'White Papers', href: '#papers' },
-      { label: 'Blog', href: '#blog' }
+      { label: t('footer.documentation'), href: '#docs' },
+      { label: t('footer.apiReference'), href: '#api' },
+      { label: t('footer.whitePapers'), href: '#papers' },
+      { label: t('footer.blog'), href: '#blog' }
     ],
     legal: [
-      { label: 'Privacy Policy', href: '#privacy' },
-      { label: 'Terms of Service', href: '#terms' },
-      { label: 'Cookie Policy', href: '#cookies' },
-      { label: 'Disclaimer', href: '#disclaimer' }
+      { label: t('footer.privacyPolicy'), href: '#privacy' },
+      { label: t('footer.termsOfService'), href: '#terms' },
+      { label: t('footer.cookiePolicy'), href: '#cookies' },
+      { label: t('footer.disclaimer'), href: '#disclaimer' }
     ]
   }
 
@@ -44,7 +48,7 @@ const Footer = () => {
   const contactInfo = [
     { icon: Mail, value: 'hello@abundra.com', href: 'mailto:hello@abundra.com' },
     { icon: Phone, value: '+1 (647) 555-0123', href: 'tel:+16475550123' },
-    { icon: MapPin, value: 'Toronto, ON, Canada', href: '#' }
+    { icon: MapPin, value: t('contact.address'), href: '#' }
   ]
 
   return (
@@ -69,16 +73,10 @@ const Footer = () => {
           >
             {/* Company Info */}
             <div className="lg:col-span-2 space-y-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
-                  <span className="text-white font-bold">A</span>
-                </div>
-                <span className="text-2xl font-bold">Abundra Capital</span>
-              </div>
+              <Logo size="md" variant="white" />
               
               <p className="text-gray-300 leading-relaxed max-w-md">
-                Building the future with AI, blockchain, and digital capital. 
-                We create intelligent solutions for tomorrow's financial infrastructure.
+                {t('footer.description')}
               </p>
 
               <div className="space-y-3">
@@ -106,7 +104,7 @@ const Footer = () => {
             {/* Links Sections */}
             <div className="lg:col-span-3 grid md:grid-cols-4 gap-8">
               <div>
-                <h3 className="text-lg font-semibold mb-4">Company</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('footer.company')}</h3>
                 <ul className="space-y-3">
                   {footerLinks.company.map((link, index) => (
                     <motion.li
@@ -128,7 +126,7 @@ const Footer = () => {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold mb-4">Services</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('footer.services')}</h3>
                 <ul className="space-y-3">
                   {footerLinks.services.map((link, index) => (
                     <motion.li
@@ -150,7 +148,7 @@ const Footer = () => {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold mb-4">Resources</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('footer.resources')}</h3>
                 <ul className="space-y-3">
                   {footerLinks.resources.map((link, index) => (
                     <motion.li
@@ -172,7 +170,7 @@ const Footer = () => {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold mb-4">Legal</h3>
+                <h3 className="text-lg font-semibold mb-4">{t('footer.legal')}</h3>
                 <ul className="space-y-3">
                   {footerLinks.legal.map((link, index) => (
                     <motion.li

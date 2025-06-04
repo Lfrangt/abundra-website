@@ -2,44 +2,47 @@
 
 import { motion } from "framer-motion";
 import { Bitcoin, Shield, TrendingUp, Wallet, Globe, Lock, BarChart3, Target } from "lucide-react";
+import { useLanguage } from '../contexts/LanguageContext';
 
 const BTCStrategy = () => {
+  const { t } = useLanguage();
+  
   const strategies = [
     {
       icon: Target,
-      title: "Initial Target",
-      value: "1 BTC",
-      description: "Company treasury holding as anti-inflation asset",
+      title: t('btc.initialTarget.title'),
+      value: t('btc.initialTarget.value'),
+      description: t('btc.initialTarget.desc'),
       color: "from-orange-500 to-orange-600"
     },
     {
       icon: Shield,
-      title: "Security Model",
-      value: "Multi-Sig",
-      description: "Multi-location cold storage with asset layering",
+      title: t('btc.security.title'),
+      value: t('btc.security.value'),
+      description: t('btc.security.desc'),
       color: "from-green-500 to-green-600"
     },
     {
       icon: Globe,
-      title: "Platforms",
-      value: "Global",
-      description: "Bitbuy (Canada), Kraken (Global), Cold Wallets",
+      title: t('btc.platforms.title'),
+      value: t('btc.platforms.value'),
+      description: t('btc.platforms.desc'),
       color: "from-blue-500 to-blue-600"
     },
     {
       icon: BarChart3,
-      title: "Accounting",
-      value: "IFRS",
-      description: "Crypto asset accounting with periodic revaluation",
+      title: t('btc.accounting.title'),
+      value: t('btc.accounting.value'),
+      description: t('btc.accounting.desc'),
       color: "from-purple-500 to-purple-600"
     }
   ];
 
   const btcMetrics = [
-    { label: "Current Price", value: "$43,250", change: "+2.4%" },
-    { label: "Market Cap", value: "$847B", change: "+1.8%" },
-    { label: "Volume 24h", value: "$18.2B", change: "+12.3%" },
-    { label: "Holdings Target", value: "1+ BTC", change: "Goal" }
+    { label: t('btc.currentPrice'), value: "$43,250", change: "+2.4%" },
+    { label: t('btc.marketCap'), value: "$847B", change: "+1.8%" },
+    { label: t('btc.volume24h'), value: "$18.2B", change: "+12.3%" },
+    { label: t('btc.holdingsTarget'), value: "1+ BTC", change: t('btc.goal') }
   ];
 
   return (
@@ -55,17 +58,16 @@ const BTCStrategy = () => {
         >
           <div className="inline-flex items-center space-x-2 bg-orange-100 rounded-full px-4 py-2 text-sm font-medium text-orange-700 mb-6">
             <Bitcoin size={16} className="text-orange-600" />
-            <span>Digital Treasury Strategy</span>
+            <span>{t('btc.badge')}</span>
           </div>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-            <span className="text-gray-900">Bitcoin</span>{' '}
+            <span className="text-gray-900">{t('btc.header')}</span>{' '}
             <span className="bg-gradient-to-r from-orange-500 to-yellow-600 bg-clip-text text-transparent">
-              Treasury
+              {t('btc.treasury')}
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Building anti-inflation, anti-cycle digital wealth structures through 
-            strategic Bitcoin holdings and transparent asset management.
+            {t('btc.subtitle')}
           </p>
         </motion.div>
 
@@ -109,11 +111,10 @@ const BTCStrategy = () => {
               transition={{ duration: 0.6 }}
             >
               <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-                Strategic Asset Allocation
+                {t('btc.strategyHeader')}
               </h3>
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                Our Bitcoin treasury strategy focuses on long-term value preservation 
-                and growth through disciplined accumulation and secure storage practices.
+                {t('btc.strategyDesc')}
               </p>
             </motion.div>
 
@@ -171,8 +172,8 @@ const BTCStrategy = () => {
                       <Bitcoin size={24} className="text-white" />
                     </div>
                     <div>
-                      <div className="text-lg font-semibold text-gray-900">BTC Treasury</div>
-                      <div className="text-sm text-gray-600">Corporate Holdings</div>
+                      <div className="text-lg font-semibold text-gray-900">{t('btc.treasuryLabel')}</div>
+                      <div className="text-sm text-gray-600">{t('btc.corporateHoldings')}</div>
                     </div>
                   </div>
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
@@ -204,11 +205,11 @@ const BTCStrategy = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 bg-white/50 rounded-xl">
                     <div className="text-2xl font-bold text-gray-900">1.0+</div>
-                    <div className="text-sm text-gray-600">Target BTC</div>
+                    <div className="text-sm text-gray-600">{t('btc.targetBtc')}</div>
                   </div>
                   <div className="p-4 bg-white/50 rounded-xl">
                     <div className="text-2xl font-bold text-gray-900">100%</div>
-                    <div className="text-sm text-gray-600">Secure Storage</div>
+                    <div className="text-sm text-gray-600">{t('btc.secureStorage')}</div>
                   </div>
                 </div>
               </div>
@@ -227,18 +228,18 @@ const BTCStrategy = () => {
           {[
             {
               icon: Lock,
-              title: "Security First",
-              description: "Multi-signature wallets and geographic distribution for maximum security"
+              title: t('btc.features.security.title'),
+              description: t('btc.features.security.desc')
             },
             {
               icon: TrendingUp,
-              title: "Long-term Growth",
-              description: "Dollar-cost averaging strategy with focus on long-term value appreciation"
+              title: t('btc.features.growth.title'),
+              description: t('btc.features.growth.desc')
             },
             {
               icon: Wallet,
-              title: "Transparent Holdings",
-              description: "Public Bitcoin addresses and regular portfolio updates for transparency"
+              title: t('btc.features.transparent.title'),
+              description: t('btc.features.transparent.desc')
             }
           ].map((feature, index) => {
             const Icon = feature.icon;

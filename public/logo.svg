@@ -1,0 +1,31 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ECDC4;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#44A08D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#093637;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="plantGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7ED321;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4ECDC4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#44A08D;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer circle with gradient -->
+  <circle cx="60" cy="60" r="55" fill="url(#circleGradient)" opacity="0.9"/>
+  
+  <!-- Inner circle background -->
+  <circle cx="60" cy="60" r="35" fill="#F8F9FA" opacity="0.95"/>
+  
+  <!-- Plant stem -->
+  <path d="M60 85 Q60 70 60 55" stroke="url(#plantGradient)" stroke-width="3" fill="none"/>
+  
+  <!-- Leaves -->
+  <ellipse cx="52" cy="65" rx="8" ry="12" fill="url(#plantGradient)" transform="rotate(-30 52 65)"/>
+  <ellipse cx="68" cy="65" rx="8" ry="12" fill="url(#plantGradient)" transform="rotate(30 68 65)"/>
+  <ellipse cx="48" cy="50" rx="7" ry="10" fill="url(#plantGradient)" transform="rotate(-45 48 50)"/>
+  <ellipse cx="72" cy="50" rx="7" ry="10" fill="url(#plantGradient)" transform="rotate(45 72 50)"/>
+  <ellipse cx="55" cy="40" rx="6" ry="9" fill="url(#plantGradient)" transform="rotate(-20 55 40)"/>
+  <ellipse cx="65" cy="40" rx="6" ry="9" fill="url(#plantGradient)" transform="rotate(20 65 40)"/>
+</svg> 

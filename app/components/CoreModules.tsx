@@ -2,19 +2,22 @@
 
 import { motion } from "framer-motion";
 import { Brain, Blocks, TrendingUp, ArrowRight, Sparkles, Shield, Zap } from "lucide-react";
+import { useLanguage } from '../contexts/LanguageContext';
 
 const CoreModules = () => {
+  const { t } = useLanguage();
+  
   const modules = [
     {
       icon: Brain,
-      title: "AI Lab",
-      subtitle: "Artificial Intelligence Solutions",
-      description: "Advanced AI model fine-tuning, intelligent advisory systems, and enterprise AI tool development. We create smart solutions that enhance decision-making and automate complex processes.",
+      title: t('modules.ai.title'),
+      subtitle: t('modules.ai.subtitle'),
+      description: t('modules.ai.desc'),
       features: [
-        "GPT Model Fine-tuning",
-        "Intelligent Investment Advisory",
-        "Enterprise AI Tools",
-        "Predictive Analytics"
+        t('modules.ai.feature1'),
+        t('modules.ai.feature2'),
+        t('modules.ai.feature3'),
+        t('modules.ai.feature4')
       ],
       color: "from-blue-500 to-blue-600",
       bgColor: "from-blue-50 to-blue-100",
@@ -22,14 +25,14 @@ const CoreModules = () => {
     },
     {
       icon: Blocks,
-      title: "Blockchain R&D",
-      subtitle: "Web3 Infrastructure & Innovation",
-      description: "Cardano ecosystem development, smart contract tools, DID projects, and Web3 API services. Building the decentralized infrastructure of tomorrow.",
+      title: t('modules.blockchain.title'),
+      subtitle: t('modules.blockchain.subtitle'),
+      description: t('modules.blockchain.desc'),
       features: [
-        "Cardano Smart Contracts",
-        "Decentralized Identity (DID)",
-        "Web3 API Development",
-        "Blockchain Infrastructure"
+        t('modules.blockchain.feature1'),
+        t('modules.blockchain.feature2'),
+        t('modules.blockchain.feature3'),
+        t('modules.blockchain.feature4')
       ],
       color: "from-purple-500 to-purple-600",
       bgColor: "from-purple-50 to-purple-100",
@@ -37,14 +40,14 @@ const CoreModules = () => {
     },
     {
       icon: TrendingUp,
-      title: "Digital Capital",
-      subtitle: "Strategic Asset Management",
-      description: "BTC treasury management, digital asset allocation, and early-stage project investments. Building anti-inflation, anti-cycle digital wealth structures.",
+      title: t('modules.capital.title'),
+      subtitle: t('modules.capital.subtitle'),
+      description: t('modules.capital.desc'),
       features: [
-        "BTC Treasury Strategy",
-        "Digital Asset Portfolio",
-        "Early Stage Investments",
-        "Risk Management"
+        t('modules.capital.feature1'),
+        t('modules.capital.feature2'),
+        t('modules.capital.feature3'),
+        t('modules.capital.feature4')
       ],
       color: "from-orange-500 to-orange-600",
       bgColor: "from-orange-50 to-orange-100",
@@ -65,17 +68,16 @@ const CoreModules = () => {
         >
           <div className="inline-flex items-center space-x-2 bg-gray-100 rounded-full px-4 py-2 text-sm font-medium text-gray-700 mb-6">
             <Sparkles size={16} className="text-blue-600" />
-            <span>Core Business Modules</span>
+            <span>{t('modules.badge')}</span>
           </div>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-            <span className="text-gray-900">Three Pillars of</span>{' '}
+            <span className="text-gray-900">{t('modules.header')}</span>{' '}
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Innovation
+              {t('modules.innovation')}
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Our integrated approach combines AI innovation, blockchain infrastructure, 
-            and strategic digital capital management to create unprecedented value.
+            {t('modules.subtitle')}
           </p>
         </motion.div>
 
@@ -136,7 +138,7 @@ const CoreModules = () => {
                     whileTap={{ scale: 0.95 }}
                     className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 font-semibold group"
                   >
-                    <span>Learn More</span>
+                    <span>{t('modules.learnMore')}</span>
                     <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-200" />
                   </motion.button>
                 </div>
@@ -177,7 +179,7 @@ const CoreModules = () => {
                       <div className="mt-8 p-4 bg-white/50 rounded-xl">
                         <div className="flex items-center space-x-2 mb-2">
                           <Shield size={16} className={`text-${module.color.split('-')[1]}-600`} />
-                          <span className="text-sm font-medium text-gray-700">Active Projects</span>
+                          <span className="text-sm font-medium text-gray-700">{t('modules.activeProjects')}</span>
                         </div>
                         <div className="text-2xl font-bold text-gray-900">
                           {index === 0 ? '12' : index === 1 ? '8' : '5'}+
@@ -203,17 +205,17 @@ const CoreModules = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20" />
             <div className="relative z-10">
               <h3 className="text-2xl lg:text-3xl font-bold mb-4">
-                Ready to Build the Future?
+                {t('modules.cta.title')}
               </h3>
               <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-                Join us in creating the next generation of AI-powered blockchain solutions
+                {t('modules.cta.subtitle')}
               </p>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-white text-gray-900 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-200"
               >
-                Get Started Today
+                {t('modules.cta.button')}
               </motion.button>
             </div>
           </div>

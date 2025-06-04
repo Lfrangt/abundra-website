@@ -3,10 +3,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown } from "lucide-react";
+import { useLanguage } from '../contexts/LanguageContext';
+import LanguageToggle from './LanguageToggle';
+import Logo from './Logo';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,11 +21,11 @@ const Navigation = () => {
   }, []);
 
   const navItems = [
-    { label: "AI Lab", href: "#ai-lab" },
-    { label: "Blockchain", href: "#blockchain" },
-    { label: "Investment", href: "#investment" },
-    { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" }
+    { label: t('nav.aiLab'), href: "#ai-lab" },
+    { label: t('nav.blockchain'), href: "#blockchain" },
+    { label: t('nav.investment'), href: "#investment" },
+    { label: t('nav.about'), href: "#about" },
+    { label: t('nav.contact'), href: "#contact" }
   ];
 
   return (
@@ -35,17 +39,7 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="flex items-center space-x-2"
-          >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">A</span>
-            </div>
-            <span className="text-xl font-semibold tracking-tight">
-              Abundra
-            </span>
-          </motion.div>
+          <Logo size="md" />
 
           {/* Desktop Navigation */}
           <div className="hidden md:block">
@@ -63,18 +57,20 @@ const Navigation = () => {
                   {item.label}
                 </motion.a>
               ))}
+              <LanguageToggle />
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-800 transition-colors duration-200 font-medium"
               >
-                Get Started
+                {t('nav.getStarted')}
               </motion.button>
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile Language Toggle and Menu */}
+          <div className="md:hidden flex items-center space-x-2">
+            <LanguageToggle />
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(!isOpen)}
@@ -115,7 +111,7 @@ const Navigation = () => {
                 transition={{ delay: navItems.length * 0.1 }}
                 className="w-full bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition-colors duration-200 font-medium mt-4"
               >
-                Get Started
+                {t('nav.getStarted')}
               </motion.button>
             </div>
           </motion.div>
