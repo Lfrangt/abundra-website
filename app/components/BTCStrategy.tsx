@@ -3,11 +3,13 @@
 import { motion } from "framer-motion";
 import { Bitcoin, Shield, TrendingUp, Wallet, Globe, Lock, BarChart3, Target } from "lucide-react";
 import { useLanguage } from '../contexts/LanguageContext';
+import { useBitcoinPrice } from '../hooks/useBitcoinPrice';
 import SectionTitle from './SectionTitle';
 import Card from './Card';
 
 const BTCStrategy = () => {
   const { t } = useLanguage();
+  const { data: btcPrice, loading, formatPrice, formatChange, formatMarketData } = useBitcoinPrice();
   
   const strategies = [
     {
@@ -41,9 +43,21 @@ const BTCStrategy = () => {
   ];
 
   const btcMetrics = [
-    { label: t('btc.currentPrice'), value: "$43,250", change: "+2.4%" },
-    { label: t('btc.marketCap'), value: "$847B", change: "+1.8%" },
-    { label: t('btc.volume24h'), value: "$18.2B", change: "+12.3%" },
+    { 
+      label: t('btc.currentPrice'), 
+      value: loading ? "加载中..." : (btcPrice ? formatPrice(btcPrice.price) : "$43,250"), 
+      change: loading ? "..." : (btcPrice ? formatChange(btcPrice.change24h) : "+2.4%") 
+    },
+    { 
+      label: t('btc.marketCap'), 
+      value: loading ? "加载中..." : (btcPrice ? formatMarketData(btcPrice.marketCap) : "$847B"), 
+      change: "+1.8%" 
+    },
+    { 
+      label: t('btc.volume24h'), 
+      value: loading ? "加载中..." : (btcPrice ? formatMarketData(btcPrice.volume24h) : "$18.2B"), 
+      change: "+12.3%" 
+    },
     { label: t('btc.holdingsTarget'), value: "1+ BTC", change: t('btc.goal') }
   ];
 
