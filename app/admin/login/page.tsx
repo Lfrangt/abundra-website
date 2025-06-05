@@ -1,13 +1,33 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [checking, setChecking] = useState(true)
   const router = useRouter()
+
+  useEffect(() => {
+    // 检查是否已经有token
+    const token = localStorage.getItem('admin_token')
+    if (token) {
+      // 简单验证token
+      try {
+        const decoded = atob(token)
+        if (decoded === 'admin123') {
+          router.push('/admin/dashboard')
+          return
+        }
+      } catch (error) {
+        // token无效，清除它
+        localStorage.removeItem('admin_token')
+      }
+    }
+    setChecking(false)
+  }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,6 +55,14 @@ export default function AdminLogin() {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-lg">检查登录状态...</div>
+      </div>
+    )
   }
 
   return (

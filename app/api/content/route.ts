@@ -3,8 +3,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const key = searchParams.get('key')
+    const key = request.nextUrl.searchParams.get('key')
 
     if (key) {
       // 获取特定内容

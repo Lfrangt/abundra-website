@@ -6,6 +6,14 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 255, 255, 255;
   --background-end-rgb: 255, 255, 255;
+  
+  /* Abundra 品牌色彩变量 */
+  --abundra-blue: #007AFF;
+  --abundra-purple: #a855f7;
+  --abundra-gold: #f59e0b;
+  --abundra-gray: #6b7280;
+  --abundra-dark: #1f2937;
+  --abundra-light: #f9fafb;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -41,6 +49,209 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Abundra 品牌化组件样式 */
+@layer components {
+  /* Abundra 按钮基础样式 */
+  .abundra-btn {
+    @apply font-abundra font-semibold rounded-abundra-lg transition-all duration-300 flex items-center justify-center;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .abundra-btn-primary {
+    @apply abundra-btn bg-gradient-to-r from-abundra-blue-500 to-abundra-blue-600 text-white;
+    @apply hover:from-abundra-blue-600 hover:to-abundra-blue-700 hover:shadow-abundra-lg;
+    @apply focus:ring-abundra-blue-500;
+  }
+  
+  .abundra-btn-secondary {
+    @apply abundra-btn bg-gradient-to-r from-abundra-purple-500 to-abundra-purple-600 text-white;
+    @apply hover:from-abundra-purple-600 hover:to-abundra-purple-700 hover:shadow-abundra-glow-purple;
+    @apply focus:ring-abundra-purple-500;
+  }
+  
+  .abundra-btn-accent {
+    @apply abundra-btn bg-gradient-to-r from-abundra-gold-500 to-abundra-gold-600 text-white;
+    @apply hover:from-abundra-gold-600 hover:to-abundra-gold-700 hover:shadow-abundra-glow-gold;
+    @apply focus:ring-abundra-gold-500;
+  }
+  
+  .abundra-btn-outline {
+    @apply abundra-btn border-2 border-abundra-blue-500 text-abundra-blue-600 bg-transparent;
+    @apply hover:bg-abundra-blue-500 hover:text-white hover:shadow-abundra-md;
+    @apply focus:ring-abundra-blue-500;
+  }
+  
+  .abundra-btn-ghost {
+    @apply abundra-btn bg-white/50 backdrop-blur-abundra-md text-abundra-gray-700 border border-abundra-gray-200;
+    @apply hover:bg-white/80 hover:border-abundra-blue-200 hover:text-abundra-blue-700;
+    @apply focus:ring-abundra-blue-500;
+  }
+
+  /* Abundra 卡片基础样式 */
+  .abundra-card {
+    @apply bg-white rounded-abundra-xl border border-abundra-gray-200 shadow-abundra-sm;
+    @apply transition-all duration-300;
+  }
+  
+  .abundra-card-hover {
+    @apply hover:shadow-abundra-lg hover:border-abundra-gray-300 hover:-translate-y-1;
+  }
+  
+  .abundra-card-glass {
+    @apply bg-white/70 backdrop-blur-abundra-lg border-abundra-gray-200/50;
+    @apply hover:bg-white/90 hover:border-abundra-blue-200/50;
+  }
+  
+  .abundra-card-feature {
+    @apply bg-gradient-to-br from-abundra-blue-50 to-abundra-purple-50;
+    @apply border-abundra-blue-200/50 hover:border-abundra-blue-300/50;
+  }
+  
+  .abundra-card-blockchain {
+    @apply bg-gradient-to-br from-abundra-gold-50 to-abundra-warning-50;
+    @apply border-abundra-gold-200/50 hover:border-abundra-gold-300/50;
+  }
+
+  /* Abundra 标题样式 */
+  .abundra-title {
+    @apply font-abundra font-bold tracking-tight;
+    letter-spacing: -0.02em;
+  }
+  
+  .abundra-title-gradient {
+    @apply bg-gradient-to-r from-abundra-blue-600 via-abundra-purple-600 to-abundra-blue-700;
+    @apply bg-clip-text text-transparent;
+  }
+  
+  .abundra-title-ai {
+    @apply bg-gradient-to-r from-abundra-blue-500 to-abundra-purple-500;
+    @apply bg-clip-text text-transparent;
+  }
+  
+  .abundra-title-blockchain {
+    @apply bg-gradient-to-r from-abundra-gold-500 to-abundra-warning-500;
+    @apply bg-clip-text text-transparent;
+  }
+
+  /* Abundra 图标容器 */
+  .abundra-icon-container {
+    @apply rounded-abundra-lg flex items-center justify-center;
+    @apply transition-all duration-300;
+  }
+  
+  .abundra-icon-ai {
+    @apply bg-gradient-to-r from-abundra-blue-500 to-abundra-blue-600;
+    @apply hover:from-abundra-blue-600 hover:to-abundra-blue-700 hover:shadow-abundra-glow;
+  }
+  
+  .abundra-icon-blockchain {
+    @apply bg-gradient-to-r from-abundra-gold-500 to-abundra-gold-600;
+    @apply hover:from-abundra-gold-600 hover:to-abundra-gold-700 hover:shadow-abundra-glow-gold;
+  }
+  
+  .abundra-icon-tech {
+    @apply bg-gradient-to-r from-abundra-purple-500 to-abundra-purple-600;
+    @apply hover:from-abundra-purple-600 hover:to-abundra-purple-700 hover:shadow-abundra-glow-purple;
+  }
+
+  /* Abundra 徽章样式 */
+  .abundra-badge {
+    @apply inline-flex items-center space-x-2 rounded-full px-4 py-2 text-sm font-medium;
+    @apply border border-abundra-gray-200/50 backdrop-blur-abundra-sm;
+  }
+  
+  .abundra-badge-primary {
+    @apply abundra-badge bg-abundra-blue-100 text-abundra-blue-700 border-abundra-blue-200/50;
+  }
+  
+  .abundra-badge-secondary {
+    @apply abundra-badge bg-abundra-purple-100 text-abundra-purple-700 border-abundra-purple-200/50;
+  }
+  
+  .abundra-badge-accent {
+    @apply abundra-badge bg-abundra-gold-100 text-abundra-gold-700 border-abundra-gold-200/50;
+  }
+  
+  .abundra-badge-neutral {
+    @apply abundra-badge bg-white/80 text-abundra-gray-700 border-abundra-gray-200/50;
+  }
+
+  /* Abundra 背景渐变 */
+  .abundra-bg-primary {
+    @apply bg-gradient-to-br from-abundra-blue-50 via-white to-abundra-purple-50/30;
+  }
+  
+  .abundra-bg-secondary {
+    @apply bg-gradient-to-br from-abundra-purple-50 via-white to-abundra-blue-50/30;
+  }
+  
+  .abundra-bg-accent {
+    @apply bg-gradient-to-br from-abundra-gold-50 via-white to-abundra-warning-50/30;
+  }
+  
+  .abundra-bg-hero {
+    @apply bg-gradient-to-br from-abundra-gray-50 via-white to-abundra-blue-50/30;
+  }
+}
+
+/* Abundra 工具类 */
+@layer utilities {
+  /* 文本渐变工具类 */
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-abundra-blue-600 to-abundra-purple-600 bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-ai {
+    @apply bg-gradient-to-r from-abundra-blue-500 to-abundra-purple-500 bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-blockchain {
+    @apply bg-gradient-to-r from-abundra-gold-500 to-abundra-warning-500 bg-clip-text text-transparent;
+  }
+  
+  /* 玻璃态效果 */
+  .glass-effect {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .glass-effect-strong {
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  /* 发光效果 */
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(0, 122, 255, 0.3);
+  }
+  
+  .glow-secondary {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  }
+  
+  .glow-accent {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+  }
+  
+  /* 悬停变换效果 */
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+  
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-abundra-glow;
+  }
+}
+
+/* 保持向后兼容的样式 */
 .apple-gradient {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
