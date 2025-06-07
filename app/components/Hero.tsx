@@ -5,6 +5,7 @@ import { ArrowDown, Play, Sparkles, Brain, Bitcoin, Zap } from "lucide-react";
 import { useLanguage } from '../contexts/LanguageContext';
 import Button from './Button';
 import Card from './Card';
+import Link from 'next/link';
 
 const Hero = () => {
   const { t } = useLanguage();
@@ -96,15 +97,17 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="flex flex-col sm:flex-row items-center justify-center space-y-abundra-md sm:space-y-0 sm:space-x-abundra-lg mb-abundra-4xl"
         >
-          <Button
-            variant="primary"
-            size="xl"
-            hoverEffect={true}
-            glowEffect={true}
-            className="min-w-[240px]"
-          >
-            {t('hero.exploreVision')}
-          </Button>
+          <a href="/admin/login" className="no-underline">
+            <Button
+              variant="primary"
+              size="xl"
+              hoverEffect={true}
+              glowEffect={true}
+              className="min-w-[240px]"
+            >
+              开始使用
+            </Button>
+          </a>
           
           <Button
             variant="ghost"

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import WalletSummary from '../../components/WalletSummary'
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -60,6 +61,51 @@ export default function AdminDashboard() {
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'wallet':
+        return (
+          <div className="space-y-6">
+            <div className="bg-white shadow rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900">Cardano 钱包管理</h3>
+                <a
+                  href="/admin/wallet"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  打开完整钱包页面
+                </a>
+              </div>
+              <p className="text-gray-600 mb-6">
+                监控和管理您的 Cardano (ADA) 数字资产持仓情况
+              </p>
+              
+              {/* 嵌入钱包摘要 */}
+              <WalletSummary />
+              
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-medium text-blue-900 mb-2">💼 持仓监控</h4>
+                  <p className="text-blue-800 text-sm">
+                    实时查看您的 ADA 余额和资产变化
+                  </p>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <h4 className="font-medium text-green-900 mb-2">📊 交易记录</h4>
+                  <p className="text-green-800 text-sm">
+                    跟踪所有收发交易的详细历史
+                  </p>
+                </div>
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                  <h4 className="font-medium text-purple-900 mb-2">🔗 区块链浏览</h4>
+                  <p className="text-purple-800 text-sm">
+                    直接在区块链浏览器中查看交易
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
       case 'content':
         return (
           <div className="bg-white shadow rounded-lg p-6">
@@ -181,21 +227,73 @@ export default function AdminDashboard() {
                 <div className="p-5">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-orange-500 rounded-md flex items-center justify-center">
-                        <span className="text-white text-sm font-medium">$</span>
+                      <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+                        <span className="text-white text-sm font-medium">₳</span>
                       </div>
                     </div>
                     <div className="ml-5 w-0 flex-1">
                       <dl>
                         <dt className="text-sm font-medium text-gray-500 truncate">
-                          BTC 总价值
+                          ADA 钱包
                         </dt>
                         <dd className="text-lg font-medium text-gray-900">
-                          --
+                          1.50 ADA
                         </dd>
                       </dl>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 钱包持仓概览 */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              <div className="lg:col-span-2">
+                <WalletSummary />
+              </div>
+              
+              {/* 快速操作面板 */}
+              <div className="bg-white shadow rounded-lg p-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">快速操作</h3>
+                <div className="space-y-3">
+                  <button
+                    onClick={() => setActiveTab('wallet')}
+                    className="w-full text-left flex items-center p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                  >
+                    <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+                      <span className="text-white text-sm font-medium">₳</span>
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">钱包管理</p>
+                      <p className="text-sm text-gray-500">查看 ADA 持仓详情</p>
+                    </div>
+                  </button>
+                  
+                  <button
+                    onClick={() => setActiveTab('btc')}
+                    className="w-full text-left flex items-center p-3 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors"
+                  >
+                    <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center mr-3">
+                      <span className="text-white text-sm font-medium">₿</span>
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">BTC 资产</p>
+                      <p className="text-sm text-gray-500">管理比特币持仓</p>
+                    </div>
+                  </button>
+                  
+                  <button
+                    onClick={() => setActiveTab('content')}
+                    className="w-full text-left flex items-center p-3 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"
+                  >
+                    <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center mr-3">
+                      <span className="text-white text-sm font-medium">内</span>
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900">内容管理</p>
+                      <p className="text-sm text-gray-500">编辑网站内容</p>
+                    </div>
+                  </button>
                 </div>
               </div>
             </div>

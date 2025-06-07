@@ -30,6 +30,9 @@ echo "NEXTAUTH_SECRET=\"your_nextauth_secret\""
 echo "NEXTAUTH_URL=\"https://your-domain.vercel.app\""
 echo "PRISMA_GENERATE_DATAPROXY=\"true\""
 echo ""
+echo "🔐 钱包功能环境变量 (可选)："
+echo "BLOCKFROST_PROJECT_ID=\"your_blockfrost_api_key\"  # 用于获取真实 Cardano 数据"
+echo ""
 
 read -p "是否继续部署? (y/N): " -n 1 -r
 echo
