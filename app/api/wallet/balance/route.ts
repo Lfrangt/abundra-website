@@ -2,6 +2,8 @@ console.log('BLOCKFROST_PROJECT_ID:', JSON.stringify(process.env.BLOCKFROST_PROJ
 import { NextRequest, NextResponse } from 'next/server';
 
 console.log('BLOCKFROST_PROJECT_ID:', process.env.BLOCKFROST_PROJECT_ID);
+console.log('
+  :', process.env.BLOCKFROST_PROJECT_ID);
 
 // Cardano 区块链浏览器 API
 const BLOCKFROST_API_URL = 'https://cardano-mainnet.blockfrost.io/api/v0';
