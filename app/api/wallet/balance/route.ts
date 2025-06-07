@@ -1,3 +1,4 @@
+console.log('BLOCKFROST_PROJECT_ID:', process.env.BLOCKFROST_PROJECT_ID);
 import { NextRequest, NextResponse } from 'next/server';
 
 console.log('BLOCKFROST_PROJECT_ID:', process.env.BLOCKFROST_PROJECT_ID);
