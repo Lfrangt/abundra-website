@@ -8,8 +8,8 @@ export const CARDANO_CONFIG = {
   
   // 钱包文件路径
   WALLET_PATHS: {
-    ADDRESS: '~/abundra-wallet/payment.addr',
-    VERIFICATION_KEY: '~/abundra-wallet/payment.vkey',
+    ADDRESS: 'cardano-wallet-records/payment.addr',
+    VERIFICATION_KEY: 'cardano-wallet-records/payment.vkey',
     // 注意：私钥路径不在这里暴露，仅在需要时访问
   },
   
@@ -58,22 +58,19 @@ export const utils = {
 };
 
 // 类型定义
+export interface Asset {
+  unit: string;
+  quantity: string;
+}
+
 export interface WalletInfo {
   address: string;
   balance: {
     ada: string;
-    lovelace: string;
+    lovelace?: string;
     assets: Asset[];
   };
   lastUpdated: string;
-}
-
-export interface Asset {
-  unit: string;
-  quantity: string;
-  policy_id?: string;
-  asset_name?: string;
-  fingerprint?: string;
 }
 
 export interface Transaction {

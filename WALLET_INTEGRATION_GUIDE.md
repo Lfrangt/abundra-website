@@ -89,11 +89,7 @@ const mockData: UTXOResponse[] = [
 1. 设置 `BLOCKFROST_PROJECT_ID` 环境变量
 2. 在 `app/api/wallet/balance/route.ts` 中取消注释真实 API 调用：
 ```typescript
-const response = await fetch(`${BLOCKFROST_API_URL}/addresses/${address}/utxos`, {
-  headers: {
-    'project_id': process.env.BLOCKFROST_PROJECT_ID || ''
-  }
-});
+console.log('BLOCKFROST_PROJECT_ID:', JSON.stringify(process.env.BLOCKFROST_PROJECT_ID));
 ```
 
 ## 🛠️ 自定义和扩展

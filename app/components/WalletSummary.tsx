@@ -14,6 +14,7 @@ interface WalletData {
     }>;
   };
   lastUpdated: string;
+  adaPriceUsd?: string;
 }
 
 export default function WalletSummary() {
@@ -55,6 +56,9 @@ export default function WalletSummary() {
   };
 
   const calculateUsdValue = (ada: string) => {
+    if (walletData && walletData.adaPriceUsd) {
+      return (parseFloat(ada) * parseFloat(walletData.adaPriceUsd)).toFixed(2);
+    }
     return (parseFloat(ada) * 0.35).toFixed(2);
   };
 

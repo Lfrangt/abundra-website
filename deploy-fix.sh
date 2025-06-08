@@ -42,4 +42,10 @@ if [ $? -eq 0 ]; then
 else
     echo "❌ 部署失败"
     exit 1
-fi 
+fi
+
+ls -l Abundra/app/api/wallet/balance/ 
+
+git add Abundra/app/api/wallet/balance/route.ts
+git commit -m "chore: log BLOCKFROST_PROJECT_ID value for debug"
+git push 

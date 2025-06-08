@@ -1,10 +1,6 @@
 console.log('BLOCKFROST_PROJECT_ID:', JSON.stringify(process.env.BLOCKFROST_PROJECT_ID));
 import { NextRequest, NextResponse } from 'next/server';
 
-console.log('BLOCKFROST_PROJECT_ID:', process.env.BLOCKFROST_PROJECT_ID);
-console.log('
-  :', process.env.BLOCKFROST_PROJECT_ID);
-
 // Cardano 区块链浏览器 API
 const BLOCKFROST_API_URL = 'https://cardano-mainnet.blockfrost.io/api/v0';
 // 注意：实际使用时需要申请 Blockfrost API key
@@ -34,72 +30,45 @@ interface WalletInfo {
 }
 
 export async function GET(request: NextRequest) {
+  // 日志输出环境变量和钱包地址
+  console.log('BLOCKFROST_PROJECT_ID:', process.env.BLOCKFROST_PROJECT_ID);
+  console.log('CARDANO_WALLET_ADDRESS:', WALLET_ADDRESS);
+  console.log('All ENV:', JSON.stringify(process.env));
+
   try {
     const address = WALLET_ADDRESS;
 
-    // 如果配置了 Blockfrost API Key，使用真实数据
-    if (process.env.BLOCKFROST_PROJECT_ID) {
-      try {
-        const response = await fetch(`${BLOCKFROST_API_URL}/addresses/${address}/utxos`, {
-          headers: {
-            'project_id': process.env.BLOCKFROST_PROJECT_ID
-          }
-        });
-
-        if (response.ok) {
-          const utxos: UTXOResponse[] = await response.json();
-          
-          // 计算总余额
-          let totalLovelace = 0;
-          const assets: Array<{ unit: string; quantity: string }> = [];
-
-          utxos.forEach(utxo => {
-            utxo.amount.forEach(amount => {
-              if (amount.unit === 'lovelace') {
-                totalLovelace += parseInt(amount.quantity);
-              } else {
-                const existing = assets.find(a => a.unit === amount.unit);
-                if (existing) {
-                  existing.quantity = (parseInt(existing.quantity) + parseInt(amount.quantity)).toString();
-                } else {
-                  assets.push(amount);
-                }
-              }
-            });
-          });
-
-          const walletInfo: WalletInfo = {
-            address,
-            balance: {
-              ada: (totalLovelace / 1000000).toFixed(6),
-              assets
-            },
-            lastUpdated: new Date().toISOString()
-          };
-
-          return NextResponse.json(walletInfo);
-        }
-      } catch (apiError) {
-        console.log('Blockfrost API error, falling back to mock data:', apiError);
-      }
+    // 使用 Blockfrost API 获取真实数据
+    if (!process.env.BLOCKFROST_PROJECT_ID) {
+      console.error('❌ Blockfrost API key not configured!');
+      return NextResponse.json(
+        { error: 'Blockfrost API key not configured' },
+        { status: 500 }
+      );
     }
 
-    // 使用模拟数据（当没有 API key 或 API 调用失败时）
-    const mockData: UTXOResponse[] = [
-      {
-        amount: [
-          { unit: "lovelace", quantity: "1500000" }, // 1.5 ADA
-        ],
-        tx_hash: "example_tx_hash_1",
-        output_index: 0
+    const response = await fetch(`${BLOCKFROST_API_URL}/addresses/${address}/utxos`, {
+      headers: {
+        'project_id': process.env.BLOCKFROST_PROJECT_ID
       }
-    ];
+    });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Blockfrost API error:', response.status, errorText);
+      return NextResponse.json(
+        { error: `Blockfrost API error: ${response.status} ${errorText}` },
+        { status: 500 }
+      );
+    }
+
+    const utxos: UTXOResponse[] = await response.json();
+    
     // 计算总余额
     let totalLovelace = 0;
     const assets: Array<{ unit: string; quantity: string }> = [];
 
-    mockData.forEach(utxo => {
+    utxos.forEach(utxo => {
       utxo.amount.forEach(amount => {
         if (amount.unit === 'lovelace') {
           totalLovelace += parseInt(amount.quantity);
@@ -114,13 +83,26 @@ export async function GET(request: NextRequest) {
       });
     });
 
-    const walletInfo: WalletInfo = {
+    // 获取 ADA 实时美元价格
+    let adaPriceUsd = 0.35;
+    try {
+      const priceRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd');
+      if (priceRes.ok) {
+        const priceData = await priceRes.json();
+        adaPriceUsd = priceData.cardano.usd;
+      }
+    } catch (e) {
+      console.error('CoinGecko ADA price fetch error:', e);
+    }
+
+    const walletInfo: WalletInfo & { adaPriceUsd: number } = {
       address,
       balance: {
         ada: (totalLovelace / 1000000).toFixed(6),
         assets
       },
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
+      adaPriceUsd
     };
 
     return NextResponse.json(walletInfo);

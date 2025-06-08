@@ -14,6 +14,7 @@ interface WalletInfo {
     }>;
   };
   lastUpdated: string;
+  adaPriceUsd?: string;
 }
 
 interface Transaction {
@@ -144,7 +145,7 @@ export default function WalletPage() {
                     ₳ {formatAmount(walletInfo.balance.ada)}
                   </div>
                   <div className="text-blue-200">
-                    ~${(parseFloat(walletInfo.balance.ada) * 0.35).toFixed(2)} USD
+                    ~${walletInfo.adaPriceUsd ? (parseFloat(walletInfo.balance.ada) * parseFloat(walletInfo.adaPriceUsd)).toFixed(2) : (parseFloat(walletInfo.balance.ada) * 0.35).toFixed(2)} USD
                   </div>
                 </div>
                 <div className="flex items-center space-x-2 text-sm text-blue-200">
