@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Wallet, RefreshCcw, Copy, ExternalLink, TrendingUp, Clock } from 'lucide-react';
+import { Wallet, RefreshCcw, Copy, ExternalLink, TrendingUp, Clock, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface WalletInfo {
   address: string;
@@ -14,7 +14,10 @@ interface WalletInfo {
     }>;
   };
   lastUpdated: string;
-  adaPriceUsd?: string;
+  adaPriceUsd?: number;
+  isStatic?: boolean;
+  message?: string;
+  error?: string;
 }
 
 interface Transaction {
@@ -25,11 +28,19 @@ interface Transaction {
   status: string;
 }
 
+interface TransactionResponse {
+  transactions: Transaction[];
+  isStatic?: boolean;
+  message?: string;
+}
+
 export default function WalletPage() {
   const [walletInfo, setWalletInfo] = useState<WalletInfo | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [isStaticData, setIsStaticData] = useState(false);
 
   const fetchWalletData = async () => {
     try {
@@ -41,8 +52,9 @@ export default function WalletPage() {
       if (!balanceResponse.ok) {
         throw new Error('Failed to fetch wallet balance');
       }
-      const balanceData = await balanceResponse.json();
+      const balanceData: WalletInfo = await balanceResponse.json();
       setWalletInfo(balanceData);
+      setIsStaticData(balanceData.isStatic || false);
 
       // 获取交易历史
       const transactionsResponse = await fetch('/api/wallet/balance', {
@@ -51,7 +63,7 @@ export default function WalletPage() {
         body: JSON.stringify({ limit: 10 })
       });
       if (transactionsResponse.ok) {
-        const transactionsData = await transactionsResponse.json();
+        const transactionsData: TransactionResponse = await transactionsResponse.json();
         setTransactions(transactionsData.transactions || []);
       }
     } catch (err) {
@@ -67,7 +79,8 @@ export default function WalletPage() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    // 可以添加一个 toast 通知
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const formatAddress = (address: string) => {
@@ -126,6 +139,28 @@ export default function WalletPage() {
           </button>
         </div>
 
+        {/* 配置提示 */}
+        {isStaticData && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4"
+          >
+            <div className="flex items-start space-x-3">
+              <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-amber-800 mb-1">显示静态数据</h3>
+                <p className="text-sm text-amber-700">
+                  当前显示的是示例数据。要查看实时钱包余额，请在 Vercel 环境变量中配置 BLOCKFROST_PROJECT_ID。
+                  <a href="https://blockfrost.io/" target="_blank" rel="noopener noreferrer" className="underline ml-1">
+                    获取 API Key
+                  </a>
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {walletInfo && (
           <>
             {/* Wallet Overview */}
@@ -134,8 +169,13 @@ export default function WalletPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="lg:col-span-2 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-6 text-white"
+                className="lg:col-span-2 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-6 text-white relative overflow-hidden"
               >
+                {isStaticData && (
+                  <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm px-2 py-1 rounded text-xs">
+                    示例数据
+                  </div>
+                )}
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold">Total Balance</h2>
                   <TrendingUp className="h-6 w-6" />
@@ -145,7 +185,12 @@ export default function WalletPage() {
                     ₳ {formatAmount(walletInfo.balance.ada)}
                   </div>
                   <div className="text-blue-200">
-                    ~${walletInfo.adaPriceUsd ? (parseFloat(walletInfo.balance.ada) * parseFloat(walletInfo.adaPriceUsd)).toFixed(2) : (parseFloat(walletInfo.balance.ada) * 0.35).toFixed(2)} USD
+                    ~${walletInfo.adaPriceUsd ? (parseFloat(walletInfo.balance.ada) * walletInfo.adaPriceUsd).toFixed(2) : (parseFloat(walletInfo.balance.ada) * 0.35).toFixed(2)} USD
+                    {walletInfo.adaPriceUsd && (
+                      <span className="text-xs ml-2">
+                        (₳1 = ${walletInfo.adaPriceUsd.toFixed(3)})
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center space-x-2 text-sm text-blue-200">
@@ -200,10 +245,14 @@ export default function WalletPage() {
                 <div className="flex space-x-2 ml-4">
                   <button
                     onClick={() => copyToClipboard(walletInfo.address)}
-                    className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                    className="p-2 text-gray-500 hover:text-gray-700 transition-colors relative"
                     title="Copy Address"
                   >
-                    <Copy className="h-4 w-4" />
+                    {copied ? (
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
                   </button>
                   <button
                     onClick={() => window.open(`https://cardanoscan.io/address/${walletInfo.address}`, '_blank')}
@@ -223,7 +272,12 @@ export default function WalletPage() {
               transition={{ delay: 0.3 }}
               className="bg-white rounded-xl p-6 shadow-sm border border-gray-200"
             >
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Transactions</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Recent Transactions</h3>
+                {isStaticData && (
+                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">示例数据</span>
+                )}
+              </div>
               {transactions.length > 0 ? (
                 <div className="space-y-4">
                   {transactions.map((tx, index) => (

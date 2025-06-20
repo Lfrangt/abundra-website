@@ -27,7 +27,23 @@ ADMIN_PASSWORD="your_secure_admin_password_here"
 # Next.js 配置
 NEXTAUTH_SECRET="your_nextauth_secret_here_change_in_production"
 NEXTAUTH_URL="https://your-domain.vercel.app"
+
+# Cardano 钱包配置 (新增)
+BLOCKFROST_PROJECT_ID="your_blockfrost_project_id"
+CARDANO_WALLET_ADDRESS="addr1vxl25dkpcafzwtwvjtu9y7xransf6nh9m27yk6mc7l8u9ksa7cndz"
 ```
+
+#### 获取 Blockfrost API Key
+
+1. 访问 [Blockfrost.io](https://blockfrost.io/)
+2. 注册免费账号
+3. 创建新项目，选择 **Cardano Mainnet**
+4. 复制 Project ID 到 `BLOCKFROST_PROJECT_ID` 环境变量
+
+**注意事项**：
+- 免费账户每天有 50,000 次请求限制
+- 如果不配置 Blockfrost API，系统将显示静态示例数据
+- 钱包地址可以使用您自己的 Cardano 地址替换
 
 ### 4. 数据库设置 (PlanetScale)
 

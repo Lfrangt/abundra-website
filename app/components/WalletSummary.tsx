@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Wallet, TrendingUp, RefreshCcw, ExternalLink } from 'lucide-react';
+import { Wallet, TrendingUp, RefreshCcw, ExternalLink, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 
 interface WalletData {
@@ -14,7 +14,9 @@ interface WalletData {
     }>;
   };
   lastUpdated: string;
-  adaPriceUsd?: string;
+  adaPriceUsd?: number;
+  isStatic?: boolean;
+  message?: string;
 }
 
 export default function WalletSummary() {
@@ -43,8 +45,8 @@ export default function WalletSummary() {
 
   useEffect(() => {
     fetchWalletData();
-    // 每30秒自动刷新
-    const interval = setInterval(fetchWalletData, 30000);
+    // 每5分钟自动刷新（避免频繁调用API）
+    const interval = setInterval(fetchWalletData, 300000);
     return () => clearInterval(interval);
   }, []);
 
@@ -57,7 +59,7 @@ export default function WalletSummary() {
 
   const calculateUsdValue = (ada: string) => {
     if (walletData && walletData.adaPriceUsd) {
-      return (parseFloat(ada) * parseFloat(walletData.adaPriceUsd)).toFixed(2);
+      return (parseFloat(ada) * walletData.adaPriceUsd).toFixed(2);
     }
     return (parseFloat(ada) * 0.35).toFixed(2);
   };
@@ -114,6 +116,11 @@ export default function WalletSummary() {
         <div className="flex items-center">
           <Wallet className="h-8 w-8 text-blue-600" />
           <h3 className="ml-3 text-lg font-medium text-gray-900">Cardano 钱包</h3>
+          {walletData?.isStatic && (
+            <span className="ml-2 text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded">
+              示例
+            </span>
+          )}
         </div>
         <div className="flex items-center space-x-2">
           <button
@@ -135,6 +142,19 @@ export default function WalletSummary() {
 
       {walletData && (
         <>
+          {/* 静态数据提示 */}
+          {walletData.isStatic && (
+            <div className="mb-4 bg-amber-50 border border-amber-200 rounded-lg p-3">
+              <div className="flex items-start space-x-2">
+                <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                <div className="text-xs text-amber-700">
+                  <p className="font-semibold mb-1">显示示例数据</p>
+                  <p>配置 Blockfrost API 以显示实时余额</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* 余额信息 */}
           <div className="mb-4">
             <div className="flex items-baseline justify-between mb-2">
@@ -144,6 +164,11 @@ export default function WalletSummary() {
                 </p>
                 <p className="text-sm text-gray-500">
                   ~${calculateUsdValue(walletData.balance.ada)} USD
+                  {walletData.adaPriceUsd && (
+                    <span className="text-xs ml-1">
+                      (@${walletData.adaPriceUsd.toFixed(3)})
+                    </span>
+                  )}
                 </p>
               </div>
               <div className="flex items-center text-green-600">
