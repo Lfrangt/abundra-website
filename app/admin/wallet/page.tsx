@@ -19,6 +19,15 @@ interface WalletInfo {
   isStatic?: boolean;
   message?: string;
   error?: string;
+  portfolio?: {
+    currentValue: number;
+    totalInvested: number;
+    profit: number;
+    profitPercentage: number;
+    averageCost: number;
+    dayChange: number;
+    dayChangePercentage: number;
+  };
 }
 
 interface Transaction {

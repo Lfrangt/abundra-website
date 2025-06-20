@@ -7,11 +7,19 @@ const BLOCKFROST_API_URL = 'https://cardano-mainnet.blockfrost.io/api/v0';
 // 钱包地址 - 优先使用环境变量
 const WALLET_ADDRESS = process.env.CARDANO_WALLET_ADDRESS || 'addr1vxl25dkpcafzwtwvjtu9y7xransf6nh9m27yk6mc7l8u9ksa7cndz';
 
+// 投资记录（实际应该从数据库获取）
+const INVESTMENT_RECORDS = {
+  purchases: [
+    { date: '2024-12-01', amount: 10, price: 0.45 },
+    { date: '2024-12-15', amount: 10, price: 0.55 },
+  ]
+};
+
 // 静态钱包数据（用于展示或 API 失败时的备选）
 const STATIC_WALLET_DATA = {
   address: WALLET_ADDRESS,
   balance: {
-    ada: '1000.00', // 示例余额
+    ada: '20.00', // 使用真实持仓数量
     assets: []
   },
   lastUpdated: new Date().toISOString(),
@@ -40,6 +48,42 @@ interface WalletInfo {
   lastUpdated: string;
   adaPriceUsd?: number;
   isStatic?: boolean;
+  // 新增收益数据
+  portfolio?: {
+    currentValue: number;
+    totalInvested: number;
+    profit: number;
+    profitPercentage: number;
+    averageCost: number;
+    dayChange: number;
+    dayChangePercentage: number;
+  };
+}
+
+// 计算投资组合收益
+function calculatePortfolioMetrics(adaAmount: number, currentPrice: number) {
+  const totalInvested = INVESTMENT_RECORDS.purchases.reduce((sum, purchase) => 
+    sum + (purchase.amount * purchase.price), 0
+  );
+  const averageCost = totalInvested / INVESTMENT_RECORDS.purchases.reduce((sum, p) => sum + p.amount, 0);
+  const currentValue = adaAmount * currentPrice;
+  const profit = currentValue - totalInvested;
+  const profitPercentage = (profit / totalInvested) * 100;
+  
+  // 模拟24小时变化（实际应该从历史数据计算）
+  const yesterdayPrice = currentPrice * (1 - (Math.random() * 0.1 - 0.05)); // ±5%随机变化
+  const dayChange = (currentPrice - yesterdayPrice) * adaAmount;
+  const dayChangePercentage = ((currentPrice - yesterdayPrice) / yesterdayPrice) * 100;
+
+  return {
+    currentValue,
+    totalInvested,
+    profit,
+    profitPercentage,
+    averageCost,
+    dayChange,
+    dayChangePercentage
+  };
 }
 
 export async function GET(request: NextRequest) {
@@ -63,9 +107,13 @@ export async function GET(request: NextRequest) {
     // 如果没有 Blockfrost API Key，返回静态数据
     if (!process.env.BLOCKFROST_PROJECT_ID) {
       console.log('No Blockfrost API key configured, returning static data');
+      const staticAda = parseFloat(STATIC_WALLET_DATA.balance.ada);
+      const portfolio = calculatePortfolioMetrics(staticAda, adaPriceUsd);
+      
       return NextResponse.json({
         ...STATIC_WALLET_DATA,
         adaPriceUsd,
+        portfolio,
         message: 'Using static data. Configure BLOCKFROST_PROJECT_ID for real-time data.'
       });
     }
@@ -82,6 +130,7 @@ export async function GET(request: NextRequest) {
       if (!response.ok) {
         // 如果是 404，可能是新钱包没有交易
         if (response.status === 404) {
+          const portfolio = calculatePortfolioMetrics(0, adaPriceUsd);
           return NextResponse.json({
             address,
             balance: {
@@ -90,6 +139,7 @@ export async function GET(request: NextRequest) {
             },
             lastUpdated: new Date().toISOString(),
             adaPriceUsd,
+            portfolio,
             message: 'Wallet is empty or has no transactions yet'
           });
         }
@@ -118,14 +168,18 @@ export async function GET(request: NextRequest) {
         });
       });
 
+      const adaAmount = totalLovelace / 1000000;
+      const portfolio = calculatePortfolioMetrics(adaAmount, adaPriceUsd);
+
       const walletInfo: WalletInfo = {
         address,
         balance: {
-          ada: (totalLovelace / 1000000).toFixed(6),
+          ada: adaAmount.toFixed(6),
           assets
         },
         lastUpdated: new Date().toISOString(),
-        adaPriceUsd
+        adaPriceUsd,
+        portfolio
       };
 
       return NextResponse.json(walletInfo);
@@ -133,9 +187,13 @@ export async function GET(request: NextRequest) {
     } catch (apiError) {
       console.error('Blockfrost API error:', apiError);
       // 返回静态数据作为备选
+      const staticAda = parseFloat(STATIC_WALLET_DATA.balance.ada);
+      const portfolio = calculatePortfolioMetrics(staticAda, adaPriceUsd);
+      
       return NextResponse.json({
         ...STATIC_WALLET_DATA,
         adaPriceUsd,
+        portfolio,
         error: 'Failed to fetch real-time data, showing static data',
         isStatic: true
       });

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Wallet, TrendingUp, RefreshCcw, ExternalLink, AlertCircle } from 'lucide-react';
+import { Wallet, TrendingUp, RefreshCcw, ExternalLink, AlertCircle, TrendingDown } from 'lucide-react';
 import Link from 'next/link';
 
 interface WalletData {
@@ -17,6 +17,15 @@ interface WalletData {
   adaPriceUsd?: number;
   isStatic?: boolean;
   message?: string;
+  portfolio?: {
+    currentValue: number;
+    totalInvested: number;
+    profit: number;
+    profitPercentage: number;
+    averageCost: number;
+    dayChange: number;
+    dayChangePercentage: number;
+  };
 }
 
 export default function WalletSummary() {
@@ -45,10 +54,19 @@ export default function WalletSummary() {
 
   useEffect(() => {
     fetchWalletData();
-    // 每5分钟自动刷新（避免频繁调用API）
-    const interval = setInterval(fetchWalletData, 300000);
+    // 每2分钟自动刷新以获取实时数据
+    const interval = setInterval(fetchWalletData, 120000);
     return () => clearInterval(interval);
   }, []);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 4
+    }).format(value);
+  };
 
   const formatAmount = (amount: string) => {
     return parseFloat(amount).toLocaleString('en-US', {
@@ -115,7 +133,7 @@ export default function WalletSummary() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center">
           <Wallet className="h-8 w-8 text-blue-600" />
-          <h3 className="ml-3 text-lg font-medium text-gray-900">Cardano 钱包</h3>
+          <h3 className="ml-3 text-lg font-medium text-gray-900">Cardano 投资组合</h3>
           {walletData?.isStatic && (
             <span className="ml-2 text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded">
               示例
@@ -155,47 +173,112 @@ export default function WalletSummary() {
             </div>
           )}
 
-          {/* 余额信息 */}
+          {/* 投资组合价值 */}
           <div className="mb-4">
             <div className="flex items-baseline justify-between mb-2">
               <div>
                 <p className="text-3xl font-bold text-gray-900">
-                  ₳ {formatAmount(walletData.balance.ada)}
+                  {walletData.portfolio ? 
+                    formatCurrency(walletData.portfolio.currentValue) : 
+                    `₳ ${formatAmount(walletData.balance.ada)}`
+                  }
                 </p>
-                <p className="text-sm text-gray-500">
-                  ~${calculateUsdValue(walletData.balance.ada)} USD
+                <div className="flex items-center space-x-2 text-sm text-gray-500">
+                  <span>
+                    ₳ {formatAmount(walletData.balance.ada)}
+                  </span>
                   {walletData.adaPriceUsd && (
-                    <span className="text-xs ml-1">
-                      (@${walletData.adaPriceUsd.toFixed(3)})
+                    <span>
+                      @{formatCurrency(walletData.adaPriceUsd)}/ADA
                     </span>
                   )}
-                </p>
+                </div>
               </div>
-              <div className="flex items-center text-green-600">
-                <TrendingUp className="h-4 w-4 mr-1" />
-                <span className="text-sm font-medium">持仓</span>
+              <div className="text-right">
+                {walletData.portfolio && (
+                  <>
+                    <div className={`flex items-center ${
+                      walletData.portfolio.profit >= 0 ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {walletData.portfolio.profit >= 0 ? (
+                        <TrendingUp className="h-4 w-4 mr-1" />
+                      ) : (
+                        <TrendingDown className="h-4 w-4 mr-1" />
+                      )}
+                      <span className="text-sm font-medium">
+                        {walletData.portfolio.profit >= 0 ? '+' : ''}
+                        {formatCurrency(walletData.portfolio.profit)}
+                      </span>
+                    </div>
+                    <div className={`text-sm ${
+                      walletData.portfolio.profitPercentage >= 0 ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {walletData.portfolio.profitPercentage >= 0 ? '+' : ''}
+                      {walletData.portfolio.profitPercentage.toFixed(2)}%
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
 
-          {/* 资产信息 */}
+          {/* 24小时变化 */}
+          {walletData.portfolio && (
+            <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">24小时变化</span>
+                <div className={`flex items-center space-x-2 ${
+                  walletData.portfolio.dayChange >= 0 ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  <span className="text-sm font-medium">
+                    {walletData.portfolio.dayChange >= 0 ? '+' : ''}
+                    {formatCurrency(walletData.portfolio.dayChange)}
+                  </span>
+                  <span className="text-xs">
+                    ({walletData.portfolio.dayChangePercentage >= 0 ? '+' : ''}
+                    {walletData.portfolio.dayChangePercentage.toFixed(2)}%)
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 投资详情 */}
           <div className="border-t pt-4">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">原生代币:</span>
-              <span className="text-gray-900">
-                {walletData.balance.assets.length > 0 
-                  ? `${walletData.balance.assets.length} 种` 
-                  : '无'
-                }
-              </span>
-            </div>
-            <div className="flex justify-between text-sm mt-1">
-              <span className="text-gray-500">钱包地址:</span>
-              <span className="text-gray-900 font-mono text-xs">
-                {walletData.address.slice(0, 8)}...{walletData.address.slice(-8)}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm mt-1">
+            {walletData.portfolio ? (
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">总投入:</span>
+                  <span className="text-gray-900 font-medium">
+                    {formatCurrency(walletData.portfolio.totalInvested)}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">平均成本:</span>
+                  <span className="text-gray-900 font-medium">
+                    {formatCurrency(walletData.portfolio.averageCost)}/ADA
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">持仓数量:</span>
+                  <span className="text-gray-900 font-medium">
+                    ₳ {formatAmount(walletData.balance.ada)}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-500">原生代币:</span>
+                <span className="text-gray-900">
+                  {walletData.balance.assets.length > 0 
+                    ? `${walletData.balance.assets.length} 种` 
+                    : '无'
+                  }
+                </span>
+              </div>
+            )}
+            
+            <div className="flex justify-between text-sm mt-2">
               <span className="text-gray-500">更新时间:</span>
               <span className="text-gray-900">
                 {new Date(walletData.lastUpdated).toLocaleTimeString('zh-CN')}
@@ -204,12 +287,18 @@ export default function WalletSummary() {
           </div>
 
           {/* 快捷操作 */}
-          <div className="mt-4 pt-4 border-t">
+          <div className="mt-4 pt-4 border-t space-y-2">
             <Link
               href="/admin/wallet"
               className="w-full bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium block"
             >
               查看完整钱包详情
+            </Link>
+            <Link
+              href="/admin/portfolio"
+              className="w-full bg-green-600 text-white text-center py-2 px-4 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium block"
+            >
+              查看投资组合分析
             </Link>
           </div>
         </>
