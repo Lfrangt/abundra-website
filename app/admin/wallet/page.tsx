@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Wallet, RefreshCcw, Copy, ExternalLink, TrendingUp, Clock, AlertCircle, CheckCircle } from 'lucide-react';
+import PortfolioChart from '../../components/PortfolioChart';
 
 interface WalletInfo {
   address: string;
@@ -270,7 +271,7 @@ export default function WalletPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white rounded-xl p-6 shadow-sm border border-gray-200"
+              className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-8"
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">Recent Transactions</h3>
@@ -311,6 +312,15 @@ export default function WalletPage() {
                   No transactions found
                 </div>
               )}
+            </motion.div>
+
+            {/* Portfolio Charts */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <PortfolioChart />
             </motion.div>
           </>
         )}
