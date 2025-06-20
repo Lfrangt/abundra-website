@@ -118,6 +118,8 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    console.log('Blockfrost API key found, fetching real-time data');
+
     // 尝试从 Blockfrost 获取真实数据
     try {
       const response = await fetch(`${BLOCKFROST_API_URL}/addresses/${address}/utxos`, {
@@ -179,14 +181,15 @@ export async function GET(request: NextRequest) {
         },
         lastUpdated: new Date().toISOString(),
         adaPriceUsd,
-        portfolio
+        portfolio,
+        // 不设置 isStatic，表示这是真实数据
       };
 
       return NextResponse.json(walletInfo);
       
     } catch (apiError) {
       console.error('Blockfrost API error:', apiError);
-      // 返回静态数据作为备选
+      // 即使API失败，也使用真实的计算数据，但标记为静态
       const staticAda = parseFloat(STATIC_WALLET_DATA.balance.ada);
       const portfolio = calculatePortfolioMetrics(staticAda, adaPriceUsd);
       
@@ -194,7 +197,7 @@ export async function GET(request: NextRequest) {
         ...STATIC_WALLET_DATA,
         adaPriceUsd,
         portfolio,
-        error: 'Failed to fetch real-time data, showing static data',
+        error: 'Failed to fetch real-time blockchain data, showing calculated data based on known holdings',
         isStatic: true
       });
     }
