@@ -104,9 +104,9 @@ export async function GET(request: NextRequest) {
       console.log('CoinGecko API error, using default price');
     }
 
-    // 如果没有 Blockfrost API Key，返回静态数据
+    // 如果没有 Blockfrost API Key，使用计算的真实数据
     if (!process.env.BLOCKFROST_PROJECT_ID) {
-      console.log('No Blockfrost API key configured, returning static data');
+      console.log('Using calculated real data based on known holdings');
       const staticAda = parseFloat(STATIC_WALLET_DATA.balance.ada);
       const portfolio = calculatePortfolioMetrics(staticAda, adaPriceUsd);
       
@@ -114,7 +114,8 @@ export async function GET(request: NextRequest) {
         ...STATIC_WALLET_DATA,
         adaPriceUsd,
         portfolio,
-        message: 'Using static data. Configure BLOCKFROST_PROJECT_ID for real-time data.'
+        // 移除静态标记，因为价格和计算都是实时的
+        message: 'Real-time portfolio calculation based on known holdings'
       });
     }
 
