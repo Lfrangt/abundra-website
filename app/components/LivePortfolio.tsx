@@ -119,40 +119,40 @@ export default function LivePortfolio() {
       <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-white/5 rounded-full -translate-x-12 -translate-y-12 blur-md"></div>
 
       {/* 标题区域 - 增强视觉效果 */}
-      <div className="flex items-center justify-between mb-6 relative z-10">
-        <div className="flex items-center space-x-4">
+      <div className="flex items-center justify-between mb-6 relative z-10 flex-wrap gap-4">
+        <div className="flex items-center space-x-3 md:space-x-4 min-w-0 flex-1">
           <motion.div 
-            className="p-3 bg-white/20 rounded-xl backdrop-blur-sm"
+            className="p-2 md:p-3 bg-white/20 rounded-xl backdrop-blur-sm flex-shrink-0"
             whileHover={{ scale: 1.1, rotate: 5 }}
             transition={{ duration: 0.2 }}
           >
-            <Wallet className="h-8 w-8" />
+            <Wallet className="h-6 w-6 md:h-8 md:w-8" />
           </motion.div>
-          <div>
-            <h3 className="text-2xl font-bold">实时投资组合</h3>
-            <p className="text-white/90 text-sm font-medium">ADA 持仓表现 • 实时更新</p>
+          <div className="min-w-0">
+            <h3 className="text-lg md:text-2xl font-bold truncate">实时投资组合</h3>
+            <p className="text-white/90 text-xs md:text-sm font-medium">ADA 持仓表现 • 实时更新</p>
           </div>
         </div>
         <motion.div 
-          className="text-right bg-white/10 rounded-xl p-3 backdrop-blur-sm"
+          className="text-right bg-white/10 rounded-xl p-2 md:p-3 backdrop-blur-sm flex-shrink-0"
           whileHover={{ scale: 1.05 }}
         >
           <div className="text-white/80 text-xs font-medium">当前 ADA 价格</div>
-          <div className="text-lg font-bold">{formatCurrency(portfolioData.adaPriceUsd)}</div>
+          <div className="text-sm md:text-lg font-bold">{formatCurrency(portfolioData.adaPriceUsd)}</div>
         </motion.div>
       </div>
 
       {/* 主要数据 - 增强卡片效果 */}
-      <div className="grid grid-cols-3 gap-4 mb-6 relative z-10">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6 relative z-10">
         {/* 当前价值 */}
         <motion.div 
-          className="text-center bg-white/15 rounded-xl p-4 backdrop-blur-sm border border-white/20"
+          className="text-center bg-white/15 rounded-xl p-3 md:p-4 backdrop-blur-sm border border-white/20"
           whileHover={{ scale: 1.02, y: -2 }}
           transition={{ duration: 0.2 }}
         >
-          <DollarSign className="h-6 w-6 mx-auto mb-2 text-white/80" />
+          <DollarSign className="h-5 w-5 md:h-6 md:w-6 mx-auto mb-2 text-white/80" />
           <div className="text-white/80 text-xs mb-2 font-medium">当前价值</div>
-          <div className="text-2xl font-bold mb-1">
+          <div className="text-xl md:text-2xl font-bold mb-1">
             {formatCurrency(portfolio.currentValue)}
           </div>
           <div className="text-white/70 text-xs">
@@ -162,17 +162,17 @@ export default function LivePortfolio() {
 
         {/* 总收益 */}
         <motion.div 
-          className="text-center bg-white/15 rounded-xl p-4 backdrop-blur-sm border border-white/20"
+          className="text-center bg-white/15 rounded-xl p-3 md:p-4 backdrop-blur-sm border border-white/20"
           whileHover={{ scale: 1.02, y: -2 }}
           transition={{ duration: 0.2 }}
         >
           {isPositive ? (
-            <TrendingUp className="h-6 w-6 mx-auto mb-2 text-green-200" />
+            <TrendingUp className="h-5 w-5 md:h-6 md:w-6 mx-auto mb-2 text-green-200" />
           ) : (
-            <TrendingDown className="h-6 w-6 mx-auto mb-2 text-red-200" />
+            <TrendingDown className="h-5 w-5 md:h-6 md:w-6 mx-auto mb-2 text-red-200" />
           )}
           <div className="text-white/80 text-xs mb-2 font-medium">总收益</div>
-          <div className="text-2xl font-bold mb-1">
+          <div className="text-xl md:text-2xl font-bold mb-1">
             {isPositive ? '+' : ''}{formatCurrency(portfolio.profit)}
           </div>
           <div className="text-white/70 text-xs">
@@ -182,13 +182,13 @@ export default function LivePortfolio() {
 
         {/* 24小时变化 */}
         <motion.div 
-          className="text-center bg-white/15 rounded-xl p-4 backdrop-blur-sm border border-white/20"
+          className="text-center bg-white/15 rounded-xl p-3 md:p-4 backdrop-blur-sm border border-white/20"
           whileHover={{ scale: 1.02, y: -2 }}
           transition={{ duration: 0.2 }}
         >
-          <Clock className="h-6 w-6 mx-auto mb-2 text-white/80" />
+          <Clock className="h-5 w-5 md:h-6 md:w-6 mx-auto mb-2 text-white/80" />
           <div className="text-white/80 text-xs mb-2 font-medium">24h 变化</div>
-          <div className={`text-2xl font-bold mb-1 ${
+          <div className={`text-xl md:text-2xl font-bold mb-1 ${
             isDayPositive ? 'text-green-200' : 'text-red-200'
           }`}>
             {isDayPositive ? '+' : ''}{formatCurrency(portfolio.dayChange)}
@@ -200,7 +200,7 @@ export default function LivePortfolio() {
       </div>
 
       {/* 投资详情 - 增强卡片效果 */}
-      <div className="grid grid-cols-4 gap-3 text-sm relative z-10 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 md:gap-3 text-sm relative z-10 mb-6">
         {[
           { label: "总投入", value: formatCurrency(portfolio.totalInvested), icon: Wallet },
           { label: "平均成本", value: formatCurrency(portfolio.averageCost), icon: DollarSign },
@@ -209,22 +209,22 @@ export default function LivePortfolio() {
         ].map((item, index) => (
           <motion.div 
             key={item.label}
-            className="bg-white/10 rounded-xl p-3 text-center backdrop-blur-sm border border-white/10"
+            className="bg-white/10 rounded-xl p-2 md:p-3 text-center backdrop-blur-sm border border-white/10"
             whileHover={{ scale: 1.05, y: -1 }}
             transition={{ duration: 0.2 }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <item.icon className="h-4 w-4 mx-auto mb-1 text-white/80" />
+            <item.icon className="h-3 w-3 md:h-4 md:w-4 mx-auto mb-1 text-white/80" />
             <div className="text-white/80 text-xs mb-1 font-medium">{item.label}</div>
-            <div className="font-bold text-sm">{item.value}</div>
+            <div className="font-bold text-xs md:text-sm">{item.value}</div>
           </motion.div>
         ))}
       </div>
 
       {/* 操作按钮 - 增强视觉效果 */}
-      <div className="flex space-x-3 relative z-10 mb-4">
+      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 relative z-10 mb-4">
         {[
           { href: "/admin/wallet", label: "钱包详情", icon: Wallet },
           { href: "/admin/portfolio", label: "完整分析", icon: BarChart3 },
@@ -236,12 +236,12 @@ export default function LivePortfolio() {
             className="flex-1 group"
           >
             <motion.div
-              className="bg-white/20 hover:bg-white/30 text-center py-3 px-3 rounded-xl transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-white/40"
+              className="bg-white/20 hover:bg-white/30 text-center py-2 md:py-3 px-3 rounded-xl transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-white/40"
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
             >
               <button.icon className="h-4 w-4 mx-auto mb-1 group-hover:scale-110 transition-transform" />
-              <div className="text-sm font-medium">{button.label}</div>
+              <div className="text-xs md:text-sm font-medium">{button.label}</div>
             </motion.div>
           </Link>
         ))}
