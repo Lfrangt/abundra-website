@@ -111,7 +111,9 @@ export async function GET(request: NextRequest) {
       const portfolio = calculatePortfolioMetrics(staticAda, adaPriceUsd);
       
       return NextResponse.json({
-        ...STATIC_WALLET_DATA,
+        address: STATIC_WALLET_DATA.address,
+        balance: STATIC_WALLET_DATA.balance,
+        lastUpdated: new Date().toISOString(),
         adaPriceUsd,
         portfolio,
         // 移除静态标记，因为价格和计算都是实时的
